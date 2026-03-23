@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promotions | Okada Manila</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;800&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --okada-purple: #7E2199;
+            --okada-dark-purple: #430a2d;
+            --okada-gold: #ffcc00;
+            --okada-cream: #FEFAC0;
+            --text-dark: #222222;
+            --white: #ffffff;
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background-color: #f9f9f9; overflow-x: hidden; }
+
+        /* --- SHARED NAV STYLES --- */
+        .nav-container { background-color: var(--okada-purple); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--okada-cream); }
+        .logo-img { width: 120px; height: auto; }
+        .book-now-nav { background-color: var(--okada-cream); color: var(--okada-dark-purple) !important; padding: 10px 20px; border-radius: 2px; cursor: pointer; }
+
+        /* --- PROMO HERO SECTION --- */
+        .promo-hero {
+            background: linear-gradient(rgba(67, 10, 45, 0.8), rgba(67, 10, 45, 0.8)), url('https://images.unsplash.com/photo-1542314831-068cd1dbfeeb');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+        }
+        .promo-hero h1 { font-family: 'Playfair Display', serif; font-size: 50px; margin-bottom: 10px; }
+        .promo-hero p { font-size: 18px; letter-spacing: 2px; text-transform: uppercase; color: var(--okada-gold); }
+
+        /* --- PROMO GRID STRUCTURE --- */
+        .promo-section { padding: 80px 10%; }
+        .promo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+        .promo-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            transition: var(--transition);
+        }
+        .promo-card:hover { transform: translateY(-10px); }
+        .promo-img { width: 100%; height: 250px; object-fit: cover; }
+        .promo-content { padding: 30px; }
+        .promo-tag { background: var(--okada-purple); color: white; padding: 5px 15px; font-size: 10px; font-weight: 700; border-radius: 20px; display: inline-block; margin-bottom: 15px; }
+        .promo-content h3 { font-family: 'Playfair Display', serif; font-size: 24px; margin-bottom: 10px; }
+        .promo-content p { color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
+        
+        .promo-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border: 2px solid var(--okada-purple);
+            color: var(--okada-purple);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 12px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .promo-btn:hover { background: var(--okada-purple); color: white; }
+
+        /* --- MODAL STYLES (MATCHING HOME.HTML) --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 9999; }
+        .modal-content { background: white; padding: 40px; border-radius: 10px; width: 90%; max-width: 500px; position: relative; }
+        .close-btn { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: var(--okada-purple); }
+        .booking-form { display: flex; flex-direction: column; gap: 15px; }
+        .booking-form input, .booking-form select { padding: 12px; border: 1px solid #ccc; border-radius: 4px; }
+        .submit-btn { background: var(--okada-purple); color: white; border: none; padding: 15px; font-weight: 700; cursor: pointer; }
+
+        /* --- SHARED FOOTER STYLES --- */
+        .c5 { background-color: #222; color: white; padding: 80px 10%; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 50px; }
+        .footer-logo { width: 150px; margin-bottom: 20px; }
+        .footer-col h4 { color: var(--okada-gold); text-transform: uppercase; margin-bottom: 25px; font-size: 14px; letter-spacing: 2px; }
+        .footer-col p { font-size: 13px; color: #bbb; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+
+    <div class="modal-overlay" id="reservationModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2 style="font-family: 'Playfair Display', serif; color: var(--okada-purple); margin-bottom: 20px;">Claim This Offer</h2>
+            <form class="booking-form">
+                <select required>
+                    <option value="" disabled selected>Select Promo Package</option>
+                    <option>Staycation Special - 20% OFF</option>
+                    <option>Weekend Getaway Deal</option>
+                    <option>Forbes 5-Star Spa Package</option>
+                </select>
+                <input type="text" placeholder="Full Name" required>
+                <input type="email" placeholder="Email Address" required>
+                <button type="submit" class="submit-btn">PROCEED TO BOOKING</button>
+            </form>
+        </div>
+    </div>
+
+    <nav class="nav-container">
+        <div class="nav-side"><div class="nav-links">
+              <a href="rooms.html">Rooms and Suites</a>
+            <a href="promos.html">Promo Offers</a>
+            <a href="javascript:void(0)" class="open-modal">Reservations</a>
+            <a href="events.html">Events</a>
+        </div></div>
+        <div class="nav-center"><a href="home.html"><img src="images/1.png" alt="Okada" class="logo-img"></a></div>
+        <div class="nav-side right"><div class="nav-links">
+            <a href="#">About Okada</a>
+            <a href="javascript:void(0)" class="book-now-nav open-modal">Book Now</a>
+        </div></div>
+    </nav>
+
+    <header class="promo-hero">
+        <p>Exclusive Privileges</p>
+        <h1>Limited Time Offers</h1>
+    </header>
+
+    <section class="promo-section">
+        <div class="promo-grid">
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d" class="promo-img" alt="Promo">
+                <div class="promo-content">
+                    <span class="promo-tag">STAYCATION</span>
+                    <h3>The Great Escape</h3>
+                    <p>Book a Deluxe King room for at least 2 nights and get 20% discount on your total bill plus free breakfast.</p>
+                    <a class="promo-btn open-modal">VIEW DETAILS</a>
+                </div>
+            </div>
+
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874" class="promo-img" alt="Promo">
+                <div class="promo-content">
+                    <span class="promo-tag">WELLNESS</span>
+                    <h3>Forbes 5-Star Retreat</h3>
+                    <p>Experience world-class relaxation with our Retreat Spa package. Includes 60-min massage for two.</p>
+                    <a class="promo-btn open-modal">VIEW DETAILS</a>
+                </div>
+            </div>
+
+            <div class="promo-card">
+                <img src="https://images.unsplash.com/photo-1590490360182-c33d57733427" class="promo-img" alt="Promo">
+                <div class="promo-content">
+                    <span class="promo-tag">DINING</span>
+                    <h3>Suite & Savory</h3>
+                    <p>Upgrade to a Junior Suite and receive a ₱3,000 dining credit valid at any of our signature restaurants.</p>
+                    <a class="promo-btn open-modal">VIEW DETAILS</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="c5">
+        <div class="footer-col">
+            <img src="images/1.png" class="footer-logo" alt="Okada Logo">
+            <p>New Seaside Drive, Entertainment City, Parañaque, 1701 Metro Manila, Philippines.</p>
+        </div>
+        <div class="footer-col">
+            <h4>Experience</h4>
+            <p>The Fountain</p><p>Cove Manila</p><p>The Retreat Spa</p>
+        </div>
+        <div class="footer-col">
+            <h4>Stay</h4>
+            <p>Rooms & Suites</p><p>Promotions</p><p>Contact Us</p>
+        </div>
+        <div class="footer-col">
+            <h4>Follow Us</h4>
+            <p>Facebook</p><p>Instagram</p><p>YouTube</p>
+        </div>
+    </footer>
+
+    <script>
+        // MODAL LOGIC
+        const modal = document.getElementById('reservationModal');
+        const openBtns = document.querySelectorAll('.open-modal');
+        const closeBtn = document.getElementById('closeModal');
+
+        openBtns.forEach(btn => {
+            btn.addEventListener('click', () => { modal.style.display = 'flex'; });
+        });
+
+        closeBtn.addEventListener('click', () => { modal.style.display = 'none'; });
+
+        window.addEventListener('click', (e) => {
+            if (e.target == modal) { modal.style.display = 'none'; }
+        });
+    </script>
+</body>
+</html>
